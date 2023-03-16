@@ -1,0 +1,177 @@
+todo-list
+Todo.java
+package com.trinadh.spring.todo;
+
+import java.util.Date;
+import java.util.Objects;
+
+public class Todo {
+	private int id;
+	private String user;
+	private String desc;
+	private Date targetDate;
+	private boolean isDone;
+	
+	
+	
+	
+	public Todo(int id, String user, String desc, Date targetDate, boolean isDone) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.desc = desc;
+		this.targetDate = targetDate;
+		this.isDone = isDone;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
+	}
+	public String getDesc() {
+		return desc;
+	}
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+	public Date getTargetDate() {
+		return targetDate;
+	}
+	public void setTargetDate(Date targetDate) {
+		this.targetDate = targetDate;
+	}
+	public boolean isDon() {
+		return isDone;
+	}
+	public void setDon(boolean isDon) {
+		this.isDone = isDon;
+	}
+	@Override
+	public String toString() {
+		return String.format("comes from toString -> :: Todo [id=%s, user=%s, desc=%s, targetDate=%s, isDon=%s]", id, user, desc, targetDate,
+				isDone);
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Todo other = (Todo) obj;
+		return id == other.id;
+	}
+	
+	
+
+}
+
+
+===============================================================
+TodoController.java
+package com.trinadh.spring.todo;
+
+
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+
+
+@Controller
+public class TodoController {
+	
+	@Autowired
+	TodoService todoService;
+
+	
+	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
+	public String todoList(ModelMap model) {
+		model.addAttribute("todos",todoService.retrieveTodos("trinadh"));
+
+	return "list-todos";
+	}
+	
+}
+
+==========================================================================================
+TodoService.java
+package com.trinadh.spring.todo;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class TodoService {
+	private static List<Todo> todos = new ArrayList<Todo>();
+	private static int todoCount = 3;
+	
+	static {
+		todos.add(new Todo(1, "trinadh", "Learn Spring MVC", new Date(),false));
+		todos.add(new Todo(2, "trinadh", "Learn Struts", new Date(), false));
+		todos.add(new Todo(3, "trinadh", "Learn Hibernate", new Date(),false));
+	}
+	public List<Todo> retrieveTodos(String user) {
+		List<Todo> filteredTodos = new ArrayList<Todo>();
+		for (Todo todo : todos) {
+			if (todo.getUser().equals(user))
+				filteredTodos.add(todo);
+		}
+		return filteredTodos;
+	}
+	
+	public void addTodo(String name, String desc, Date targetDate, boolean isDone) {
+		todos.add(new Todo(++todoCount, name, desc, targetDate, isDone));
+	}
+	
+	public void deleteTodo(int id) {
+		
+		Iterator<Todo> iterator = todos.iterator();
+		
+		while (iterator.hasNext()) {
+			Todo todo = iterator.next();
+			if (todo.getId() == id) {
+				iterator.remove();
+			}
+		}
+	}
+
+}
+
+====================================================================================================================
+list-todos.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+ ${todos}
+</body>
+</html>
+===================================================================================
