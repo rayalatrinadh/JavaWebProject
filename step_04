@@ -1,0 +1,49 @@
+created JSTL Tag
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+Hi ${name}
+<br/>
+your todos are :
+ <br/>
+ 
+ <c:forEach items = "${todos}" var = "todo">
+ ${todo.id} ${todo.desc} ${todo.user} </br>
+ </c:forEach> 
+ 
+ 
+ 
+ <table>
+			<caption>Your Todos are</caption>
+
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Date</th>
+					<th>Completed</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<c:forEach items="${todos}" var="todo">
+					<tr>
+						<td>${todo.id}</td>
+						<td>${todo.targetDate}</td>
+            <!-- Note in java bean convention is removed so todo.done-->
+						<td>${todo.done}</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+ 
+ <a class = "button" href="/spring-mvc-example/add-todo">Add</a> 
+
+</body>
+</html>
