@@ -1,0 +1,45 @@
+package com.trinadh.spring.todo;
+
+
+
+
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+
+@Controller
+public class TodoController {
+	
+	@Autowired
+	TodoService todoService;
+
+	
+	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
+	public String todoList(ModelMap model) {
+		model.addAttribute("todos",todoService.retrieveTodos("trinadh"));
+		return "list-todos";
+	}
+	
+	
+	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
+	public String showtodoList(ModelMap model) {
+		return "todo";
+	}
+	
+	@RequestMapping(value = "/add-todo", method = RequestMethod.POST)
+	public String addtodoList(ModelMap model,@RequestParam String desc) {
+		model.clear();
+		todoService.addTodo("trinadh", desc, new Date(), false);
+		return "redirect:list-todos";
+	}
+	
+
+	
+}
