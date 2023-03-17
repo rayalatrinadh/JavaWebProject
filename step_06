@@ -1,0 +1,84 @@
+list-todos.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<html>
+<head>
+<link href="webjars/bootstrap/3.3.6/css/bootstrap.min.css"
+	    		rel="stylesheet">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+Hi ${name}
+<br/>
+your todos are :
+ <br/>
+ 
+ <c:forEach items = "${todos}" var = "todo">
+ ${todo.id} ${todo.desc} ${todo.user} </br>
+ </c:forEach> 
+ 
+ 
+ 
+ <table>
+			<caption>Your Todos are</caption>
+
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Date</th>
+					<th>Completed</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<c:forEach items="${todos}" var="todo">
+					<tr>
+						<td>${todo.id}</td>
+						<td>${todo.targetDate}</td>
+						<td>${todo.done}</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+ 
+ <a class = "button" href="/spring-mvc-example/add-todo">Add</a> 
+
+<script src="webjars/jquery/1.9.1/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+-----------------------------------------------------------------------------------------------------
+spring-servlet.xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+	    xmlns:context="http://www.springframework.org/schema/context"
+	    xmlns:mvc="http://www.springframework.org/schema/mvc"
+	    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Enable Spring MVC -->
+   <context:component-scan base-package="com.trinadh.spring" />
+	<bean
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix">
+            <value>/WEB-INF/views/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>
+	
+	<!-- location to specify where the bootstrap and jquery resources paths available -->
+	<mvc:resources mapping="/webjars/**" location="/webjars/"/>
+	    <mvc:annotation-driven />
+	    
+	</beans>
+	----------------------------------------------------------------------------------------------------
+	
